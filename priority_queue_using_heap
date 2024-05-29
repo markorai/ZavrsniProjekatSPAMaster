@@ -1,0 +1,68 @@
+import heapq
+class PriorityQueue:
+    def __init__(self):
+        self.heap = []
+
+    def is_empty(self):
+        return len(self.heap) == 0
+
+    def push(self, item, priority):
+        heapq.heappush(self.heap, (priority, item))
+
+    def pop(self):
+        if self.is_empty():
+            raise IndexError("pop from an empty priority queue")
+        return heapq.heappop(self.heap)[1]
+
+    def peek(self):
+        if self.is_empty():
+            raise IndexError("peek from an empty priority queue")
+        return self.heap[0][1]
+
+    def change_priority(self, item, new_priority):
+        found = False
+        for index, (priority, current_item) in enumerate(self.heap):
+            if current_item == item:
+                found = True
+                del self.heap[index]
+                self.heap.append((new_priority, item))
+                break
+        if not found:
+            raise ValueError(f"Item {item} not found in the priority queue")
+        heapq.heapify(self.heap)
+
+    def __len__(self):
+        return len(self.heap)
+
+    def __str__(self):
+        return str([item for priority, item in self.heap])
+
+# Example usage
+if __name__ == "__main__":
+    pq = PriorityQueue()
+
+    # Insert items with priority
+    pq.push("task1", 3)
+    pq.push("task2", 1)
+    pq.push("task3", 2)
+
+    # Print the priority queue
+    print("Priority Queue:", pq)
+
+    # Peek the highest priority item
+    print("Peek:", pq.peek())
+
+    # Pop the highest priority item
+    print("Pop:", pq.pop())
+
+    # Print the priority queue after pop
+    print("Priority Queue after pop:", pq)
+
+    # Change the priority of an item
+    pq.change_priority("task3", 0)
+
+    # Print the priority queue after changing priority
+    print("Priority Queue after changing priority:", pq)
+
+    # Print the length of the priority queue
+    print("Length:", len(pq))
